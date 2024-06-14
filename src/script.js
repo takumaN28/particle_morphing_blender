@@ -79,9 +79,10 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(sizes.pixelRatio)
 
-debugObject.clearColor = '#160920'
-gui.addColor(debugObject, 'clearColor').onChange(() => { renderer.setClearColor(debugObject.clearColor) })
-renderer.setClearColor(debugObject.clearColor)
+// debugObject.clearColor = '#160920'
+// gui.addColor(debugObject, 'clearColor').onChange(() => { renderer.setClearColor(debugObject.clearColor) })
+// renderer.setClearColor(debugObject.clearColor)
+renderer.setClearColor( 0x000000, 0 )
 
 /**
  * Particles
@@ -186,7 +187,7 @@ let particles = null
             vertexShader: particlesVertexShader,
             fragmentShader: particlesFragmentShader,
             uniforms: {
-                uSize: new THREE.Uniform(0.1),
+                uSize: new THREE.Uniform(0.15),
                 uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width * sizes.pixelRatio, sizes.height * sizes.pixelRatio)),
                 uProgress: new THREE.Uniform(0),
                 // uColorA: new THREE.Uniform(new THREE.Color(particles.colorA)),
