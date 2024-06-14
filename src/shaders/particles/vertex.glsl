@@ -1,12 +1,10 @@
 uniform vec2 uResolution;
 uniform float uSize;
 uniform float uProgress;
-uniform vec3 uColorA;
-uniform vec3 uColorB;
-uniform vec3 uColors[5];   // 使用する5色の配列
 attribute vec3 aPositionTarget;
 attribute float aSize;
 attribute vec3 aColor;
+attribute vec3 aColorTarget;
 
 varying vec3 vColor;
 
@@ -42,6 +40,9 @@ void main()
     // Color
     // Varying
     // vColor = mix(uColorA,uColorB,noise);
-    vColor = aColor; // で頂点カラーから設定
+    vec3 currentColor = aColor;
+    vec3 targetColor = aColorTarget;
+    vec3 mixColor =  mix(currentColor, targetColor, progress);
+    vColor = mixColor; // で頂点カラーから設定
     
 }

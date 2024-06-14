@@ -207,7 +207,8 @@ let particles = null
         particles.morph = (index) => {
             particles.geometry.attributes.position = particles.positions[particles.index];
             particles.geometry.attributes.aPositionTarget = particles.positions[index];
-            particles.geometry.attributes.aColor = particles.colors[index];
+            particles.geometry.attributes.aColor = particles.colors[particles.index];
+            particles.geometry.attributes.aColorTarget = particles.colors[index];
        
             gsap.fromTo(
                 particles.material.uniforms.uProgress,
