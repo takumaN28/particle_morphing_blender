@@ -1,4 +1,4 @@
-varying vec3 vColor;
+varying vec4 vColor;
 
 void main()
 {
@@ -20,11 +20,11 @@ void main()
     if (distanceToCenter > 0.5) {
         alpha = 0.0;  // 外側は完全に透明
     } else {
-        alpha = 1.0;  // 内側は透明度なし
+        alpha = vColor.a;  // 内側は透明度なし
     }
 
     // gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
-    gl_FragColor = vec4(vColor, alpha);
+    gl_FragColor = vec4(vColor.rgb, alpha);
     
     #include <tonemapping_fragment>
     #include <colorspace_fragment>

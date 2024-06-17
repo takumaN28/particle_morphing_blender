@@ -123,17 +123,18 @@ let particles = null
             const newArray = new Float32Array(particles.maxCount * 3);
     
             const originalColorArray = colors[index].array;
-            // console.log('originalColorArray',originalColorArray)
+            console.log('originalColorArray',originalColorArray)
             const newColorArray = new Uint16Array(particles.maxCount * 4);
             // console.log('newColorArray',newColorArray)
     
+            
             for (let i = 0; i < particles.maxCount; i++) {
                 const i3 = i * 3;
                 const i4 = i * 4;
                 if (i3 < originalArray.length) {
-                    newArray[i3 + 0] = originalArray[i3 + 0] + (Math.random() * 0.8);
-                    newArray[i3 + 1] = originalArray[i3 + 1] + (Math.random() * 0.8);
-                    newArray[i3 + 2] = originalArray[i3 + 2] + (Math.random() * 0.8);
+                    newArray[i3 + 0] = originalArray[i3 + 0] + ((Math.random() - 0.5) * 0.8);
+                    newArray[i3 + 1] = originalArray[i3 + 1] + ((Math.random() - 0.5) * 0.8);
+                    newArray[i3 + 2] = originalArray[i3 + 2] + ((Math.random() - 0.5) * 0.8);
     
                     newColorArray[i4 + 0] = originalColorArray[i4 + 0];
                     newColorArray[i4 + 1] = originalColorArray[i4 + 1];
@@ -141,16 +142,17 @@ let particles = null
                     newColorArray[i4 + 3] = originalColorArray[i4 + 3];
                 } else {
                     const positionRandomIndex = Math.floor(position.count * Math.random()) * 3;
-                    const colorRandomIndex = Math.floor(originalColorArray.length * Math.random()) * 4;
+                    const colorRandomIndex = Math.floor((originalColorArray.length /4) * Math.random()) * 4;
                     
-                    newArray[i3 + 0] = originalArray[positionRandomIndex + 0];
-                    newArray[i3 + 1] = originalArray[positionRandomIndex + 1];
-                    newArray[i3 + 2] = originalArray[positionRandomIndex + 2];
+                    newArray[i3 + 0] = originalArray[positionRandomIndex + 0] + ((Math.random() - 0.5) * 0.8);
+                    newArray[i3 + 1] = originalArray[positionRandomIndex + 1] + ((Math.random() - 0.5) * 0.8);
+                    newArray[i3 + 2] = originalArray[positionRandomIndex + 2] + ((Math.random() - 0.5) * 0.8);
     
                     newColorArray[i4 + 0] = originalColorArray[colorRandomIndex + 0];
                     newColorArray[i4 + 1] = originalColorArray[colorRandomIndex + 1];
                     newColorArray[i4 + 2] = originalColorArray[colorRandomIndex + 2];
-                    newColorArray[i4 + 3] = originalColorArray[colorRandomIndex + 3];
+                    // newColorArray[i4 + 3] = originalColorArray[colorRandomIndex + 3];
+                    newColorArray[i4 + 3] = 0;
                 }
             }
     
@@ -178,7 +180,7 @@ let particles = null
 
         particles.geometry.setAttribute('aColor', particles.colors[particles.index]);
         // particles.geometry.setAttribute('aColor', colors[particles.index]);//一旦直接入れる方法もある
-        // console.log( particles.colors)
+        console.log( particles.colors)
         particles.geometry.setAttribute('aColorTarget', particles.colors[1]);
  
 
@@ -227,12 +229,12 @@ let particles = null
     
         particles.morph0 = () => { particles.morph(0) };
         particles.morph1 = () => { particles.morph(1) };
-        // particles.morph2 = () => { particles.morph(2) };
+        particles.morph2 = () => { particles.morph(2) };
         // particles.morph3 = () => { particles.morph(3) };
     
         gui.add(particles, 'morph0');
         gui.add(particles, 'morph1');
-        // gui.add(particles, 'morph2');
+        gui.add(particles, 'morph2');
         // gui.add(particles, 'morph3');
     });
     

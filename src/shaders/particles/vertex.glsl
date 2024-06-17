@@ -3,10 +3,10 @@ uniform float uSize;
 uniform float uProgress;
 attribute vec3 aPositionTarget;
 attribute float aSize;
-attribute vec3 aColor;
-attribute vec3 aColorTarget;
+attribute vec4 aColor;
+attribute vec4 aColorTarget;
 
-varying vec3 vColor;
+varying vec4 vColor;
 
 #include ../includes/simplexNoise3d.glsl
 
@@ -40,9 +40,9 @@ void main()
     // Color
     // Varying
     // vColor = mix(uColorA,uColorB,noise);
-    vec3 currentColor = aColor;
-    vec3 targetColor = aColorTarget;
-    vec3 mixColor =  mix(currentColor, targetColor, progress);
+    vec4 currentColor = aColor;
+    vec4 targetColor = aColorTarget;
+    vec4 mixColor =  mix(currentColor, targetColor, progress);
     vColor = mixColor; // で頂点カラーから設定
     
 }
