@@ -12,14 +12,21 @@ varying vec4 vColor;
 #include ../includes/simplexNoise3d.glsl
 
 
+// 乱数
 float random(float seed) {
     return fract(sin(seed) * 43758.5453123);
+}
+
+// 偏りのある乱数を生成する関数
+float biasedRandom(float seed) {
+    float rnd = random(seed);
+    return pow(rnd, 3.0);  // ここで3乗して小さい値と大きい値に偏らせる
 }
 
 void main()
 {
     // パーティクルごとに異なるランダムな揺らぎの強度を生成
-    float amplitude = random(position.x + position.y + position.z) * 0.2;
+    float amplitude = biasedRandom(position.x + position.y + position.z) * 0.2;
 
     // パーティクルの位置を時間と共にオフセット
     vec3 aPositionOffset = aPositionTarget + vec3(
