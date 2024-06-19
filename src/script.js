@@ -61,12 +61,19 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0, 0, 8 * 2)
-scene.add(camera)
+camera.position.set(0, 0, 24 * 2)
+// camera.position.set(0, 36, 0)
+
+
+// カメラの向きを手動で設定する
+// const target = new THREE.Vector3(0, 0, 0); // カメラが向く方向
+// camera.lookAt(target);
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+
+scene.add(camera)
 
 /**
  * Renderer
@@ -97,8 +104,7 @@ let particles = null
     gltfLoader.load('./text.glb', (gltf) => {
         particles = {};
         particles.index = 0;
-    
-    
+
         const positions = gltf.scene.children.map((child) => {
             // console.log('position', child.geometry.attributes.position)
             return child.geometry.attributes.position;
@@ -118,12 +124,14 @@ let particles = null
     
         particles.positions = [];
         particles.colors = [];
+        const ratio = 1.0;
+
         for (const [index, position] of positions.entries()) {
             const originalArray = position.array;
             const newArray = new Float32Array(particles.maxCount * 3);
     
             const originalColorArray = colors[index].array;
-            console.log('originalColorArray',originalColorArray)
+            // console.log('originalColorArray',originalColorArray)
             const newColorArray = new Uint16Array(particles.maxCount * 4);
             // console.log('newColorArray',newColorArray)
     
@@ -132,9 +140,9 @@ let particles = null
                 const i3 = i * 3;
                 const i4 = i * 4;
                 if (i3 < originalArray.length) {
-                    newArray[i3 + 0] = originalArray[i3 + 0] + ((Math.random() - 0.5) * 0.8);
-                    newArray[i3 + 1] = originalArray[i3 + 1] + ((Math.random() - 0.5) * 0.8);
-                    newArray[i3 + 2] = originalArray[i3 + 2] + ((Math.random() - 0.5) * 0.8);
+                    newArray[i3 + 0] = originalArray[i3 + 0] + ((Math.random() - 0.5) * ratio);
+                    newArray[i3 + 1] = originalArray[i3 + 1] + ((Math.random() - 0.5) * ratio);
+                    newArray[i3 + 2] = originalArray[i3 + 2] + ((Math.random() - 0.5) * ratio);
     
                     newColorArray[i4 + 0] = originalColorArray[i4 + 0];
                     newColorArray[i4 + 1] = originalColorArray[i4 + 1];
@@ -144,9 +152,9 @@ let particles = null
                     const positionRandomIndex = Math.floor(position.count * Math.random()) * 3;
                     const colorRandomIndex = Math.floor((originalColorArray.length /4) * Math.random()) * 4;
                     
-                    newArray[i3 + 0] = originalArray[positionRandomIndex + 0] + ((Math.random() - 0.5) * 0.8);
-                    newArray[i3 + 1] = originalArray[positionRandomIndex + 1] + ((Math.random() - 0.5) * 0.8);
-                    newArray[i3 + 2] = originalArray[positionRandomIndex + 2] + ((Math.random() - 0.5) * 0.8);
+                    newArray[i3 + 0] = originalArray[positionRandomIndex + 0] + ((Math.random() - 0.5) * ratio);
+                    newArray[i3 + 1] = originalArray[positionRandomIndex + 1] + ((Math.random() - 0.5) * ratio);
+                    newArray[i3 + 2] = originalArray[positionRandomIndex + 2] + ((Math.random() - 0.5) * ratio);
     
                     newColorArray[i4 + 0] = originalColorArray[colorRandomIndex + 0];
                     newColorArray[i4 + 1] = originalColorArray[colorRandomIndex + 1];
@@ -192,6 +200,7 @@ let particles = null
                 uSize: new THREE.Uniform(0.15),
                 uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width * sizes.pixelRatio, sizes.height * sizes.pixelRatio)),
                 uProgress: new THREE.Uniform(0),
+                uTime: { value: 0 },
                 // uColorA: new THREE.Uniform(new THREE.Color(particles.colorA)),
                 // uColorB: new THREE.Uniform(new THREE.Color(particles.colorB)),
             },
@@ -243,10 +252,20 @@ let particles = null
 /**
  * Animate
  */
+const clock = new THREE.Clock();
+
 const tick = () =>
 {
+    const elapsedTime = clock.getElapsedTime();
+
+    // Update time uniform
+    if (particles) {
+        particles.material.uniforms.uTime.value = elapsedTime;
+    }
+    
     // Update controls
-    controls.update()
+    // controls.update()
+
 
     // Render normal scene
     renderer.render(scene, camera)
@@ -256,3 +275,4 @@ const tick = () =>
 }
 
 tick()
+
