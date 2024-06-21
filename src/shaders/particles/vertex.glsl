@@ -20,7 +20,7 @@ float random(float seed) {
 // 偏りのある乱数を生成する関数
 float biasedRandom(float seed) {
     float rnd = random(seed);
-    return pow(rnd, 3.0);  // ここで3乗して小さい値と大きい値に偏らせる
+    return pow(rnd, 6.0);  // 小さい値と大きい値に偏らせる
 }
 
 void main()
