@@ -23,20 +23,33 @@ float biasedRandom(float seed) {
     return pow(rnd, 6.0);  // 小さい値と大きい値に偏らせる
 }
 
+
 void main()
 {
     // パーティクルごとに異なるランダムな揺らぎの強度を生成
-    float amplitude = biasedRandom(position.x + position.y + position.z) * 0.2;
+    // float amplitude = biasedRandom(position.x + position.y + position.z) * 0.2;
+    // 乱数
+    float randomSeed = random(position.x + position.y + position.z); // 乱数を決定
+    float amplitude = pow(randomSeed, 6.0) * 0.2; // 揺らぎの強度をランダムに決定
 
     // パーティクルの位置を時間と共にオフセット
-    vec3 aPositionOffset = aPositionTarget + vec3(
+    vec3 positionOffset = position + vec3(
         sin(position.x * 10.0 + uTime) * amplitude,
         cos(position.y * 10.0 + uTime) * amplitude,
         sin(position.z * 10.0 + uTime) * amplitude
     );
 
+    vec3 aPositionOffset = aPositionTarget;
+    if (uProgress >= 1.0) {
+        aPositionOffset = aPositionTarget + vec3(
+            sin(position.x * 10.0 + uTime) * amplitude,
+            cos(position.y * 10.0 + uTime) * amplitude,
+            sin(position.z * 10.0 + uTime) * amplitude
+        );
+    };
+
     // mixed position
-    float noiseOrigin = simplexNoise3d(position * 0.2);
+    float noiseOrigin = simplexNoise3d(positionOffset * 0.2);
     float noiseTarget = simplexNoise3d(aPositionOffset * 0.2);
     float noise = mix(noiseOrigin, noiseTarget, uProgress); //progressが進むにつれて元のpositionと後のpositionが混ざるようにすることで始まりと終わりにnoiseがかかる
     noise = smoothstep(-1.0, 1.0, noise); // 与えられた範囲で動く
@@ -46,7 +59,7 @@ void main()
     float end = delay + duration;
 
     float progress = smoothstep(delay, end, uProgress); //
-    vec3 mixedPosition = mix(position, aPositionOffset, progress); //現在表示してるpositionと次のaPositionTargetとをprogressでmixさせる
+    vec3 mixedPosition = mix(positionOffset, aPositionOffset, progress); //現在表示してるpositionと次のaPositionTargetとをprogressでmixさせる
 
     // Final position
     vec4 modelPosition = modelMatrix * vec4(mixedPosition, 1.0);

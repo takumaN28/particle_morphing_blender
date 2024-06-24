@@ -1,42 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Particles Morphing</title>
     <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-    <canvas id="canvas001" style="width: 100vw; height: 100vh;"></canvas>
+    <div class="bgCanvas">
+        <div class="gradient gradient1"></div>
+        <div class="gradient gradient2"></div>
+        <div class="gradient gradient3"></div>
+    </div>
     <canvas class="webgl"></canvas>
     <script type="module" src="./script.js"></script>
-    <script>
-        window.onload = function() {
-    const canvas001 = document.getElementById("canvas001");
-    if (canvas001.getContext) {
-        console.log(canvas001.clientWidth)
-        const width = canvas001.clientWidth;
-        const height = canvas001.clientHeight;
-        const context001 = canvas001.getContext("2d");//2次元描画
-        let lineargradient = context001.createLinearGradient(0, 0, 150, 0);
-        let lineargradient2 = context001.createLinearGradient(0, 0, 0, 150);
-        let lineargradient3 = context001.createLinearGradient(150, 150, 0, 0);
-
-        lineargradient.addColorStop(0, 'rgba(255,255,255,0)');
-        lineargradient.addColorStop(1, '#DED2B3');
-        lineargradient2.addColorStop(0, 'rgba(255,255,255,0)');
-        lineargradient2.addColorStop(1, '#DBB4B4');
-        lineargradient3.addColorStop(0, 'rgba(255,255,255,0)');
-        lineargradient3.addColorStop(1, '#A5CCD3');
-
-        context001.fillStyle = lineargradient;
-        context001.fillRect(0, 0, width, height);
-        context001.fillStyle = lineargradient2;
-        context001.fillRect(0, 0, width, height);
-        context001.fillStyle = lineargradient3;
-        context001.fillRect(0, 0, width, height);
-    }
-};
-    </script>
+  
 </body>
+
 </html>

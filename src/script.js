@@ -61,17 +61,17 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0, 0, 24 * 2)
-// camera.position.set(0, 36, 0)
+// camera.position.set(0, 0, 24 * 2)
+camera.position.set(0, 36, 0)
 
 
 // カメラの向きを手動で設定する
-// const target = new THREE.Vector3(0, 0, 0); // カメラが向く方向
-// camera.lookAt(target);
+const target = new THREE.Vector3(0, 0, 0); // カメラが向く方向
+camera.lookAt(target);
 
 // Controls
-const controls = new OrbitControls(camera, canvas)
-controls.enableDamping = true
+// const controls = new OrbitControls(camera, canvas)
+// controls.enableDamping = true
 
 scene.add(camera)
 
@@ -101,7 +101,7 @@ let particles = null
 // gltfLoader.load('./models.glb', (gltf)=>{
     // gltfLoader.load('./nadia.glb', (gltf) => {
     // gltfLoader.load('./boats.glb', (gltf) => {
-    gltfLoader.load('./text.glb', (gltf) => {
+    gltfLoader.load('./nObject.glb', (gltf) => {
         particles = {};
         particles.index = 0;
 
@@ -181,14 +181,15 @@ let particles = null
         
         particles.geometry = new THREE.BufferGeometry();
 
+        console.log('(初期)現在のパーティクル', particles.positions[particles.index].array[12])
+        console.log('(初期)次のパーティクル', particles.positions[1].array[12])
+
         particles.geometry.setAttribute('position', particles.positions[particles.index]);
         particles.geometry.setAttribute('aPositionTarget', particles.positions[1]);
 
         particles.geometry.setAttribute('aSize', new THREE.BufferAttribute(sizesArray, 1));
 
         particles.geometry.setAttribute('aColor', particles.colors[particles.index]);
-        // particles.geometry.setAttribute('aColor', colors[particles.index]);//一旦直接入れる方法もある
-        console.log( particles.colors)
         particles.geometry.setAttribute('aColorTarget', particles.colors[1]);
  
 
@@ -217,6 +218,10 @@ let particles = null
 
         // Methods
         particles.morph = (index) => {
+            console.log('index', index)
+            console.log('現在のパーティクル', particles.positions[particles.index].array[12])
+            console.log('次のパーティクル', particles.positions[index].array[12])
+
             particles.geometry.attributes.position = particles.positions[particles.index];
             particles.geometry.attributes.aPositionTarget = particles.positions[index];
             particles.geometry.attributes.aColor = particles.colors[particles.index];
@@ -225,7 +230,12 @@ let particles = null
             gsap.fromTo(
                 particles.material.uniforms.uProgress,
                 { value: 0 },
-                { value: 1, duration: 3, ease: 'linear' }
+                { value: 1, duration: 3, ease: 'linear' ,
+                    onComplete: () => {
+                        console.log('call back')
+                        // particles.geometry.attributes.position = particles.positions[index];
+                     }
+                },
             );
             particles.index = index;
           
@@ -233,8 +243,6 @@ let particles = null
 
 
         gui.add(particles.material.uniforms.uProgress, 'value').min(0).max(1).step(0.001).name('uProgress');
-        // gui.addColor(particles, 'colorA').onChange(() => { particles.material.uniforms.uColorA.value.set(particles.colorA) });
-        // gui.addColor(particles, 'colorB').onChange(() => { particles.material.uniforms.uColorB.value.set(particles.colorB) });
     
         particles.morph0 = () => { particles.morph(0) };
         particles.morph1 = () => { particles.morph(1) };
