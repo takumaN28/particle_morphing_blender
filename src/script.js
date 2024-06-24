@@ -198,7 +198,7 @@ let particles = null
             vertexShader: particlesVertexShader,
             fragmentShader: particlesFragmentShader,
             uniforms: {
-                uSize: new THREE.Uniform(0.15),
+                uSize: new THREE.Uniform(0.2),
                 uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width * sizes.pixelRatio, sizes.height * sizes.pixelRatio)),
                 uProgress: new THREE.Uniform(0),
                 uTime: { value: 0 },
@@ -233,7 +233,7 @@ let particles = null
                 { value: 1, duration: 3, ease: 'linear' ,
                     onComplete: () => {
                         console.log('call back')
-                        // particles.geometry.attributes.position = particles.positions[index];
+                        particles.geometry.attributes.position = particles.positions[index];
                      }
                 },
             );
