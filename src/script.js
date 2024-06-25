@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import GUI from 'lil-gui'
 import gsap from 'gsap'
+import { TweenMax, TimelineMax, Elastic } from "gsap";
 import particlesVertexShader from './shaders/particles/vertex.glsl'
 import particlesFragmentShader from './shaders/particles/fragment.glsl'
 
@@ -232,6 +233,7 @@ let particles = null
                 { value: 0 },
                 { value: 1, duration: 3, ease: 'linear' ,
                     onComplete: () => {
+                        //ランダムに動かすために
                         console.log('call back')
                         particles.geometry.attributes.position = particles.positions[index];
                      }
@@ -254,7 +256,36 @@ let particles = null
         gui.add(particles, 'morph2');
         // gui.add(particles, 'morph3');
     });
+
+
     
+/**
+ * パーティクル位置のランダム更新関数（偏りを加える）
+ */
+function updateParticles(particles) {
+    const positions = particles.geometry.attributes.position.array;
+    const maxOffset = 0.1; // 移動の最大オフセット（必要に応じて調整）
+    const amplitudeFactor = 0.2; // 偏りの強度係数（必要に応じて調整）
+
+    for (let i = 0; i < positions.length; i += 3) {
+        const seed = i / positions.length; // 各パーティクルごとに異なるシード値を生成
+        const amplitude = biasedRandom(seed) * amplitudeFactor;
+
+        positions[i] += Math.sin((Math.random() - 0.5) * maxOffset) * amplitude;
+        positions[i + 1] += Math.sin((Math.random() - 0.5) * maxOffset) * amplitude;
+        positions[i + 2] += Math.sin((Math.random() - 0.5) * maxOffset) * amplitude;
+    }
+
+    particles.geometry.attributes.position.needsUpdate = true;
+}
+
+/**
+ * 偏りのある乱数を生成する関数
+ */
+function biasedRandom(seed) {
+    const rnd = Math.random(seed);
+    return Math.pow(rnd, 10.0); // 小さい値と大きい値に偏らせる
+}
 
 
 /**
@@ -266,11 +297,14 @@ const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime();
 
-    // Update time uniform
-    if (particles) {
-        particles.material.uniforms.uTime.value = elapsedTime;
+   // Update time uniform
+   if (particles) {
+    particles.material.uniforms.uTime.value = elapsedTime;
+
+    // パーティクルの位置をランダムに更新
+    updateParticles(particles);
     }
-    
+
     // Update controls
     // controls.update()
 

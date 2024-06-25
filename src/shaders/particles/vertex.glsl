@@ -11,44 +11,44 @@ varying vec4 vColor;
 
 #include "../includes/simplexNoise3d.glsl"
 
-// 乱数
-float random(float seed) {
-    return fract(sin(seed) * 43758.5453123);
-}
+// // 乱数
+// float random(float seed) {
+//     return fract(sin(seed) * 43758.5453123);
+// }
 
-// 偏りのある乱数を生成する関数
-float biasedRandom(float seed) {
-    float rnd = random(seed);
-    return pow(rnd, 6.0);  // 小さい値と大きい値に偏らせる
-}
+// // 偏りのある乱数を生成する関数
+// float biasedRandom(float seed) {
+//     float rnd = random(seed);
+//     return pow(rnd, 6.0);  // 小さい値と大きい値に偏らせる
+// }
 
 void main()
 {
-    // パーティクルごとに異なるランダムな揺らぎの強度を生成
-    float randomSeed = random(position.x + position.y + position.z);
-    float amplitude = pow(randomSeed, 6.0) * 0.2; // 揺らぎの強度をランダムに決定
+    // // パーティクルごとに異なるランダムな揺らぎの強度を生成
+    // float randomSeed = random(position.x + position.y + position.z);
+    // float amplitude = pow(randomSeed, 6.0) * 0.2; // 揺らぎの強度をランダムに決定
 
-    // 現在のランダムなオフセット位置
-    vec3 positionOffset = position + vec3(
-        sin(position.x * 10.0 + uTime) * amplitude,
-        cos(position.y * 10.0 + uTime) * amplitude,
-        sin(position.z * 10.0 + uTime) * amplitude
-    );
+    // // 現在のランダムなオフセット位置
+    // vec3 positionOffset = position + vec3(
+    //     sin(position.x * 10.0 + uTime) * amplitude,
+    //     cos(position.y * 10.0 + uTime) * amplitude,
+    //     sin(position.z * 10.0 + uTime) * amplitude
+    // );
 
-    // 開始時と終了時の目標位置
-    vec3 startTargetOffset = aPositionTarget + vec3(
-        sin(position.x * 10.0 + uTime) * amplitude,
-        cos(position.y * 10.0 + uTime) * amplitude,
-        sin(position.z * 10.0 + uTime) * amplitude
-    );
-    vec3 endTargetOffset = aPositionTarget; // 切り替え後の目標位置
+    // // 開始時と終了時の目標位置
+    // vec3 startTargetOffset = aPositionTarget + vec3(
+    //     sin(position.x * 10.0 + uTime) * amplitude,
+    //     cos(position.y * 10.0 + uTime) * amplitude,
+    //     sin(position.z * 10.0 + uTime) * amplitude
+    // );
+    // vec3 endTargetOffset = aPositionTarget; // 切り替え後の目標位置
 
-    // 目標位置の補間
-    vec3 targetOffset = mix(startTargetOffset, endTargetOffset, smoothstep(0.0, 1.0, uProgress));
+    // // 目標位置の補間
+    // vec3 targetOffset = mix(startTargetOffset, endTargetOffset, smoothstep(0.0, 1.0, uProgress));
 
     // ノイズの計算
-    float noiseOrigin = simplexNoise3d(positionOffset * 0.2);
-    float noiseTarget = simplexNoise3d(targetOffset * 0.2);
+    float noiseOrigin = simplexNoise3d(position * 0.2);
+    float noiseTarget = simplexNoise3d(aPositionTarget * 0.2);
     float noise = mix(noiseOrigin, noiseTarget, uProgress);
     noise = smoothstep(-1.0, 1.0, noise);
 
@@ -58,7 +58,7 @@ void main()
     float end = delay + duration;
 
     float progress = smoothstep(delay, end, uProgress);
-    vec3 mixedPosition = mix(positionOffset, targetOffset, progress); // 現在位置と目標位置の補間
+    vec3 mixedPosition = mix(position, aPositionTarget, progress); // 現在位置と目標位置の補間
 
     // 最終的な位置計算
     vec4 modelPosition = modelMatrix * vec4(mixedPosition, 1.0);
