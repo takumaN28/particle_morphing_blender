@@ -199,7 +199,7 @@ let particles = null
             vertexShader: particlesVertexShader,
             fragmentShader: particlesFragmentShader,
             uniforms: {
-                uSize: new THREE.Uniform(0.2),
+                uSize: new THREE.Uniform(0.24),
                 uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width * sizes.pixelRatio, sizes.height * sizes.pixelRatio)),
                 uProgress: new THREE.Uniform(0),
                 uTime: { value: 0 },
