@@ -102,7 +102,7 @@ let particles = null
 // gltfLoader.load('./models.glb', (gltf)=>{
     // gltfLoader.load('./nadia.glb', (gltf) => {
     // gltfLoader.load('./boats.glb', (gltf) => {
-    gltfLoader.load('./nObject.glb', (gltf) => {
+    gltfLoader.load('./nObj.glb', (gltf) => {
         particles = {};
         particles.index = 0;
 
@@ -199,7 +199,7 @@ let particles = null
             vertexShader: particlesVertexShader,
             fragmentShader: particlesFragmentShader,
             uniforms: {
-                uSize: new THREE.Uniform(0.24),
+                uSize: new THREE.Uniform(0.2),
                 uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width * sizes.pixelRatio, sizes.height * sizes.pixelRatio)),
                 uProgress: new THREE.Uniform(0),
                 uTime: { value: 0 },
