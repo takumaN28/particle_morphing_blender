@@ -99,9 +99,6 @@ renderer.setClearColor( 0x000000, 0 )
 let particles = null
 
 //load models
-// gltfLoader.load('./models.glb', (gltf)=>{
-    // gltfLoader.load('./nadia.glb', (gltf) => {
-    // gltfLoader.load('./boats.glb', (gltf) => {
     gltfLoader.load('./nObj.glb', (gltf) => {
         particles = {};
         particles.index = 0;
@@ -199,7 +196,7 @@ let particles = null
             vertexShader: particlesVertexShader,
             fragmentShader: particlesFragmentShader,
             uniforms: {
-                uSize: new THREE.Uniform(0.2),
+                uSize: new THREE.Uniform(0.18),
                 uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width * sizes.pixelRatio, sizes.height * sizes.pixelRatio)),
                 uProgress: new THREE.Uniform(0),
                 uTime: { value: 0 },
@@ -248,12 +245,12 @@ let particles = null
     
         particles.morph0 = () => { particles.morph(0) };
         particles.morph1 = () => { particles.morph(1) };
-        particles.morph2 = () => { particles.morph(2) };
+        // particles.morph2 = () => { particles.morph(2) };
         // particles.morph3 = () => { particles.morph(3) };
     
         gui.add(particles, 'morph0');
         gui.add(particles, 'morph1');
-        gui.add(particles, 'morph2');
+        // gui.add(particles, 'morph2');
         // gui.add(particles, 'morph3');
     });
 
