@@ -9,12 +9,8 @@ import {
     DRACOLoader
 } from 'three/addons/loaders/DRACOLoader.js'
 import GUI from 'lil-gui'
+import Stats from "three/examples/jsm/libs/stats.module"
 import gsap from 'gsap'
-import {
-    TweenMax,
-    TimelineMax,
-    Elastic
-} from "gsap";
 import particlesVertexShader from './shaders/particles/vertex.glsl'
 import particlesFragmentShader from './shaders/particles/fragment.glsl'
 
@@ -324,12 +320,19 @@ function biasedRandom(seed) {
 }
 
 
+const stats = new Stats();
+//初期表示するためのインデックスを指定
+stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom);
+
 /**
  * Animate
  */
 const clock = new THREE.Clock();
 
 const tick = () => {
+    stats.begin();
+
     const elapsedTime = clock.getElapsedTime();
 
     // Update time uniform
@@ -346,6 +349,8 @@ const tick = () => {
 
     // Render normal scene
     renderer.render(scene, camera)
+
+    stats.end();
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
